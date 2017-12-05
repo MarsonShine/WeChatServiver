@@ -14,7 +14,14 @@ namespace WeChatService
             WxHandle wxHandle = new WxHandle();
             var access_token = wxHandle.GetAccessToken().GetAwaiter().GetResult();
             Console.WriteLine(access_token);
-            wxHandle.GetWxCode(access_token, "http://localhost:56956/FillBugsForBillDoc.aspx").GetAwaiter().GetResult();
+
+            var ticket = wxHandle.GetTicket(access_token).GetAwaiter().GetResult();
+            Console.WriteLine(ticket);
+
+            var tuple = wxHandle.GetWxWebAuthenticationAccessToken("",openid=> {
+                //业务逻辑代码
+            }).GetAwaiter().GetResult();
+            //wxHandle.GetWxCode(access_token, "http://localhost:56956/FillBugsForBillDoc.aspx").GetAwaiter().GetResult();
             Console.ReadLine();
         }
     }

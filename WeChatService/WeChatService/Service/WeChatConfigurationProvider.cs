@@ -36,7 +36,24 @@ namespace WeChatService.Service
             _configuration.WeChat.RefreshDate = DateTime.Now.AddSeconds(7000);
             SaveJsonConfigFile(_configuration);
         }
-        
+
+        public void SaveTicket(string ticket)
+        {
+            _configuration.JsSdk.JsApiTicket = ticket;
+            _configuration.JsSdk.CreateDate = DateTime.Now;
+            _configuration.JsSdk.RefreshDate = DateTime.Now.AddSeconds(7000);
+            SaveJsonConfigFile(_configuration);
+        }
+
+        public void SaveAuthenticationAccessToken(string accessToken)
+        {
+            _configuration.JsSdk.AccessToken = accessToken;
+            _configuration.JsSdk.AuthenticationTokenCreateDate = DateTime.Now;
+            _configuration.JsSdk.AuthenticationTokenRefreshDate = DateTime.Now.AddSeconds(7000);
+            SaveJsonConfigFile(_configuration);
+
+        }
+
         public WeChatConfiguration Instance
         {
             set
@@ -57,12 +74,7 @@ namespace WeChatService.Service
         private void SaveJsonConfigFile(WeChatConfiguration configuration)
         {
             //写入json文件
-            File.WriteAllText(_configJsonUrl, JsonConvert.SerializeObject(configuration));
-            using (StreamWriter file = File.CreateText(_configJsonUrl))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, configuration);
-            }
-        }
+            File.WriteAllText(_configJsonUrl, JsonConvert.SerializeObject(configuration,Formatting.Indented,new JsonSerializerSettings()));
+        }     
     }
 }
